@@ -1,0 +1,23 @@
+provider,match_type,pattern,priority,notes
+AWeber,suffix,aweber.com,10,ESP inbound handling
+dPoczta,suffix,dpoczta.pl,10,Polish provider
+Gmail,contains,gmail-smtp-in.l.google.com,10,gmail.com and googlemail.com consumer MX
+GMX,suffix,gmx.net,10,United Internet GMX
+GoDaddy / SecureServer,suffix,secureserver.net,10,Catches smtp.secureserver.net and mailstore*.secureserver.net
+Google Workspace,suffix,aspmx.l.google.com,10,Google Workspace primary MX
+Google Workspace,suffix,aspmx2.googlemail.com,11,Workspace additional MX
+Google Workspace,suffix,aspmx3.googlemail.com,11,Workspace additional MX
+Google Workspace,regex,^alt[0-9]+\.aspmx\.l\.google\.com$,12,Workspace alt MX
+Google Workspace,exact,smtp.google.com,10,"Google relay endpoint, not standard MX set"
+iCloud Mail,suffix,mail.icloud.com,10,Apple iCloud Mail
+Mail DE,suffix,mail.de,10,United Internet mail.de
+Microsoft 365,suffix,mail.protection.outlook.com,10,Office 365 and Exchange Online Protection
+Mimecast,suffix,mimecast.com,10,Inbound security gateway
+Outlook,suffix,olc.protection.outlook.com,10,"Handles outlook.com, hotmail.com, msn.com, etc..."
+Proofpoint,suffix,pphosted.com,10,Proofpoint Enterprise
+Proofpoint,suffix,iphmx.com,10,Proofpoint Essentials
+Proton Mail,suffix,protonmail.ch,10,Proton Mail inbound MX
+Spamhaus,suffix,spamteq.com,10,"Unusual as MX, review if found"
+Spamhaus,suffix,spamhaus.org,50,"Unusual as MX, review if found"
+O2,suffix,tlen.pl,10,Polish mailbox provider
+Yahoo,suffix,yahoodns.net,10,"Handles yahoo.com, aol.com, verizon.net, and others"
