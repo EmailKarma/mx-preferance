@@ -122,6 +122,8 @@ def provider_from_dns_error(err: Optional[str]) -> Optional[str]:
         return "Bad Domain - Timeout"
     if err == "NoNameservers":
         return "Bad Domain - NoNameservers"
+    if err == "NoMail":
+        return "Bad Domain - No mail"
     return "Bad Domain - DNS Error"
 
 def is_subdomain(child: str, parent: str) -> bool:
@@ -225,7 +227,10 @@ def lookup_mx_highest_priority(
         records: List[Tuple[int, str]] = []
         for rdata in answers:
             pref = int(getattr(rdata, "preference"))
-            host = str(getattr(rdata, "exchange")).rstrip(".").lower()
+            raw_host = str(getattr(rdata, "exchange")).strip().lower()
+            # Null MX (RFC 7505) can appear as a single dot.
+            # Keep it as "." so we can detect "no mail" explicitly.
+            host = "." if raw_host == "." else raw_host.rstrip(".")
             records.append((pref, host))
 
         if not records:
@@ -233,7 +238,13 @@ def lookup_mx_highest_priority(
 
         best_pref = min(pref for pref, _ in records)
         best_hosts = sorted({host for pref, host in records if pref == best_pref})
+
+        # If the highest-priority MX is a Null MX ("."), the domain does not accept mail.
+        if best_hosts == ["."]:
+            return domain, best_pref, best_hosts, "NoMail"
+
         return domain, best_pref, best_hosts, None
+
 
     except dns.resolver.NXDOMAIN:
         return domain, None, [], "NXDOMAIN"
@@ -341,6 +352,10 @@ def main() -> int:
 
             provider = classify_mx_hosts(mx_hosts, patterns)
 
+            # Null MX: preserve "." in output, but classify as "no mail"
+            if not provider and (err == "NoMail" or mx_hosts == ["."]):
+                provider = "Bad Domain - No mail"
+
             # Map DNS failures with no MX to explicit "Bad Domain" buckets
             if not provider and err and not mx_hosts:
                 provider = provider_from_dns_error(err)
@@ -361,16 +376,19 @@ def main() -> int:
 
     out_counts = dated_output_name(input_path, "counts")
     out_domains = dated_output_name(input_path, "domains")
-    out_unclassified = dated_output_name(input_path, "unclassified")
+    # out_unclassified = dated_output_name(input_path, "unclassified")
 
     write_counts(out_counts, provider_counts)
     write_domains(out_domains, domain_to_provider, domain_to_best_pref, domain_to_mx)
-    write_unclassified(out_unclassified, unclassified)
+    # write_unclassified(out_unclassified, unclassified)
+
+    # Suppressed for now: Custom MX now absorbs most "unclassified" cases.
+    # Keep the code so we can re-enable if we add a strict mode later.
 
     print("Done.")
     print(f"Wrote: {out_counts}")
     print(f"Wrote: {out_domains}")
-    print(f"Wrote: {out_unclassified}")
+    # print(f"Wrote: {out_unclassified}")
     return 0
 
 
