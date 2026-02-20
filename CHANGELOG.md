@@ -2,56 +2,97 @@
 
 All notable changes to this project will be documented in this file.
 
-This project follows a lightweight semantic versioning approach:
-- Major versions introduce breaking changes.
-- Minor versions add functionality in a backward-compatible way.
-- Patch versions fix bugs or improve performance without changing behaviour.
+This project follows semantic versioning.
 
 ---
 
-## [0.1.0] – 2026-01-22
+## [0.1.1] - 2026-02-20
 
-### Initial release
+---
 
-First public release of the MX Provider Classifier.
+## What’s New in v0.1.1
+
+Version: **v0.1.1**
+
+A command-line tool to:
+
+- Extract domains from email addresses or domain lists
+- Perform MX lookups
+- Classify providers based on pattern matching
+- Identify bad domains
+- Generate structured reporting outputs
+
+---
+
+### Enhanced Counts Output
+
+The counts file now includes two metrics:
+
+| Field | Description |
+|--------|-------------|
+| `domain_count` | Number of unique domains mapped to a provider |
+| `record_count` | Total number of input records mapped to a provider |
+
+This allows you to see:
+
+- Provider dominance by unique domain footprint
+- Provider dominance by dataset volume
+- Duplicate email impact
+- Noise from bad domains
+
+Example:
+
+```
+
+provider,domain_count,record_count
+Outlook,4,1500
+Microsoft 365,7,500
+Mimecast,5,230
+Proofpoint,18,200
+Custom MX,120,320
+Bad Domain - NXDOMAIN,12,12
+
+```
 
 ### Added
-- Support for input files containing email addresses, domains, or mixed content.
-- Automatic extraction and de-duplication of domains from input files.
-- MX record lookups using the system resolver or a user-specified nameserver.
-- Classification based on **highest-priority MX records only**.
-- Pattern-driven provider identification via an editable CSV file.
-- Separation of consumer and business platforms:
-  - Gmail vs Google Workspace
-  - Outlook vs Microsoft 365
-- Identification of common mailbox providers and gateways, including:
-  - Google, Microsoft, Yahoo, iCloud, Proton Mail
-  - Mimecast, Proofpoint (Enterprise and Essentials)
-  - GoDaddy / SecureServer
-- Explicit handling of DNS failure cases:
-  - No MX records
-  - NXDOMAIN
-  - Timeout
-  - No nameservers
-- Automatic classification of unmatched MX records as **Custom MX**.
-- Parallel DNS lookups with configurable worker count.
-- Three CSV outputs:
-  - Provider counts
-  - Domain-to-provider mapping
-  - DNS errors and edge cases
+- Added `record_count` metric to Counts output.
+- Counts file now reports:
+  - `domain_count` (unique domains per provider)
+  - `record_count` (total input records per provider, including duplicates)
+- Duplicate input records are now preserved for reporting accuracy.
 
-### Configuration
-- Provider classification logic externalized to `provider_patterns.csv`.
-- Support for `suffix`, `contains`, `exact`, and `regex` matching.
-- Pattern priority ordering to avoid provider overlap.
+### Changed
+- MX lookups are still performed once per unique domain to avoid redundant DNS queries.
+- Counts output now includes all buckets:
+  - Mailbox providers
+  - Security gateways
+  - Institutional platforms
+  - Custom MX
+  - Bad Domain categories
+- Improved internal aggregation logic for clearer reporting.
 
-### Output
-- Deterministic, date-stamped output filenames.
-- Transparent reporting of MX preference and evaluated MX hosts.
-
-### Known limitations
-- Does not validate mailbox existence.
-- Does not detect provider migrations or mixed-provider configurations.
-- Does not enrich results with ASN, WHOIS, or IP data.
+### Technical Notes
+- Input processing now separates:
+  - `raw_domains` (preserves duplicates)
+  - `domains` (unique list for MX lookups)
+- Updated `write_counts()` to support dual-metric output.
+- Suppressed `unclassified` file output while retaining fallback bucket logic.
 
 ---
+
+## [0.1] - Initial Release
+
+### Features
+- MX lookup with highest-priority record selection.
+- Provider classification using pattern matching (`provider_patterns.csv`).
+- Support for:
+  - Mailbox providers (Google, Microsoft, Yahoo, etc.)
+  - Security gateways (Proofpoint, Mimecast, etc.)
+  - Institutional platforms (DFN, NHS Mail, etc.)
+  - Custom MX detection
+  - DNS error classification
+- Output files:
+  - Provider counts
+  - Domain-to-provider mapping
+  - Unclassified domains
+- Customizable DNS resolver support via command-line options.

@@ -1,290 +1,164 @@
 # MX Provider Classifier
 
-A Python tool that analyzes email addresses or domains, looks up their MX records, and classifies them by mailbox provider or mail infrastructure.
+## Overview
 
-This tool helps answer questions like:
+This tool analyses domains or email addresses and determines:
 
-* How many domains use Gmail, Microsoft 365, Yahoo, or other providers?
-* Which domains are behind security gateways like Mimecast or Proofpoint?
-* Which domains are misconfigured or not mail-ready?
-* Which domains run custom or self-hosted mail systems?
+- Which provider handles inbound mail
+- Whether the domain uses a security gateway
+- Whether the domain does not accept mail
+- Whether the domain is invalid or misconfigured
 
-## What the tool does
-
-Given a source file containing **email addresses and/or domains**, the script will:
-
-1. Extract the domain portion (from email addresses if needed).
-2. Perform MX lookups for each domain.
-3. Use **only the highest-priority MX records** (lowest preference value).
-4. Classify domains based on a pattern table you control.
-5. Return three CSV outputs:
-
-   * Provider counts
-   * Domain-to-provider mapping
-   * DNS failures and edge cases
-
-## Supported classifications
-
-Out of the box, the tool can identify:
-
-* Gmail 
-* Google Workspace
-* Outlook 
-* Microsoft 365
-* Yahoo
-* iCloud Mail
-* Proton Mail
-* Mimecast
-* Proofpoint (Enterprise and Essentials)
-* GoDaddy / SecureServer
-* Various regional and niche providers
-* Custom MX (self-hosted or unknown providers)
-* Bad domains (DNS failures, no MX, NXDOMAIN, etc.)
-
-New providers can be added by editing the provider_patterns.csv file. No code changes required.
+Provider classification is driven by a manually maintained
+`provider_patterns.csv` file for maximum flexibility.
 
 ---
 
-## Repository structure
+## Installation
 
-```text
-scripts/
-├── mx_provider_classifier.py
-├── provider_patterns.csv
-```
-
-Note: Both files should live in the same directory.
-
----
-
-## Requirements
-
-* Python 3.9 or newer
-* `dnspython`
+Requires Python 3.9+
 
 Install dependencies:
 
-```bash
-pip install dnspython
 ```
-or
-```bash
+
 pip install -r requirements.txt
+
 ```
 
 ---
 
-## Input file format
+## Usage
 
-The input file can contain:
-
-* Email addresses
-* Domains
-* Mixed content
-
-Supported formats:
-
-* Plain text (one value per line)
-* CSV files (domain or email in the first column)
-
-Examples:
-
-```text
-user@example.com
-example.org
-marketing@company.ca
 ```
 
-or
+python mx_provider_classifier.py
 
-```csv
-email
-user@example.com
-sales@brand.com
 ```
+
+The script will prompt for:
+
+1. Path to input file
+2. Optional custom DNS nameserver
 
 ---
 
-## How MX classification works
+## DNS Configuration
 
-* The script looks up **all MX records** for a domain.
-* It selects the **highest-priority MX set** (lowest preference value).
-* If multiple MX records share that priority, all are evaluated.
-* The MX hostnames are compared against `provider_patterns.csv`.
-* The first matching pattern (by priority) determines the provider.
+By default, the script uses the system resolver.
 
-If no pattern matches:
-
-* Domains with MX records are labeled **Custom MX**.
-* Domains without MX records or with DNS errors are labeled **Bad Domain** with a reason.
+You may optionally provide a specific nameserver via command-line flag or configuration update.
 
 ---
 
-## Running the tool
+## Input Format
 
-### Basic usage
+Accepts:
 
-From the repository root:
+- Plain domain list
+- Email address list
+- CSV files (first column assumed domain/email)
 
-```bash
-python [location]/mx_provider_classifier.py
-```
-
-You’ll be prompted for the input file path.
-
-### Specify the input file directly
-
-```bash
-python [PATH]/mx_provider_classifier.py --input [PATH]/domains.txt
-```
-
-### Use a specific DNS resolver
-
-By default, the system resolver is used. You can override it:
-
-```bash
-python [PATH]/mx_provider_classifier.py \
-  --input [PATH]/domains.txt \
-  --nameserver 8.8.8.8
-```
-
-This is useful for:
-
-* Reproducible results
-* Debugging DNS inconsistencies
-* Avoiding local resolver caching
-
-### Adjust DNS timeout
-
-```bash
-python [PATH]/mx_provider_classifier.py --timeout 6.0
-```
-
-Default is 4 seconds.
-
-### Control concurrency
-
-MX lookups run in parallel. Adjust if you’re hitting rate limits:
-
-```bash
-python [PATH]/mx_provider_classifier.py --workers 10
-```
-
-Default is 20.
+Duplicates are preserved for reporting accuracy.
 
 ---
 
-## Output files
+## Outputs
 
-All output files are written to the current directory and follow this format:
+Given an input file:
 
-```text
-YYYY-MM-DD-[result type]-[original file name].csv
 ```
 
-### 1. Provider counts
+input.csv
 
-Example filename:
-
-```text
-2026-01-22-counts-domains.txt.csv
 ```
 
-Columns:
+The script generates:
 
-* `provider`
-* `domain_count`
-
-### 2. Domain classification
-
-Example filename:
-
-```text
-2026-01-22-domains-domains.txt.csv
 ```
 
-Columns:
+YYYY-MM-DD-counts-input.csv
+YYYY-MM-DD-domain-provider-input.csv
 
-* `domain`
-* `provider`
-* `best_mx_preference`
-* `mx_hosts`
-
-MX hosts are semicolon-separated.
-
-### 3. Unclassified and DNS errors
-
-Example filename:
-
-```text
-2026-01-22-unclassified-domains.txt.csv
 ```
 
-Columns:
+### Counts File Columns
 
-* `domain`
-* `best_mx_preference`
-* `mx_hosts`
-* `error`
+```
 
-This file is your review queue for:
+provider
+domain_count
+record_count
 
-* New providers to pattern
-* DNS failures
-* Edge cases
+```
+
+All classification buckets are included:
+
+- Mailbox providers
+- Security gateways
+- Institutional platforms
+- Custom MX
+- Bad Domain categories
 
 ---
 
-## Provider pattern configuration
+## Bad Domain Categories
 
-All provider logic lives in `provider_patterns.csv`.
+The script detects:
 
-Example:
+- Bad Domain - NXDOMAIN
+- Bad Domain - NoAnswer
+- Bad Domain - Timeout
+- Bad Domain - NoNameservers
+- Bad Domain - No mail (Null MX per RFC 7505)
 
-```csv
+---
+
+## Provider Pattern File
+
+Classification is driven by:
+
+```
+
+provider_patterns.csv
+
+```
+
+Structure:
+
+```
+
 provider,match_type,pattern,priority,notes
-Microsoft 365,suffix,mail.protection.outlook.com,10,Exchange Online Protection
-Google Workspace,suffix,aspmx.l.google.com,10,Workspace primary MX
-Mimecast,suffix,mimecast.com,10,Inbound security gateway
-Custom Provider,suffix,example.net,20,Example provider
+
 ```
 
-### Match types
+Supported match types:
 
-* `suffix`: hostname ends with the pattern
-* `contains`: hostname contains the pattern
-* `exact`: full hostname match
-* `regex`: Python regular expression
+- `suffix`
+- `exact`
+- `regex`
 
-Lower priority numbers win.
-
----
-
-## Bad domain classification
-
-The tool automatically labels DNS failures:
-
-* **Bad Domain – No MX**
-  Domain exists but has no MX records.
-* **Bad Domain – NXDOMAIN**
-  Domain does not exist.
-* **Bad Domain – Timeout**
-  DNS lookup failed.
-* **Bad Domain – NoNameservers**
-  Broken or missing delegation.
-
-These are included in provider counts by default.
+Patterns are evaluated by priority.
 
 ---
 
-## When to use this tool
+## Design Principles
 
-This tool is ideal for:
+- One MX lookup per unique domain
+- Preserve input record counts
+- Avoid overfitting patterns
+- Classify infrastructure, not customers
+- Keep provider rules human-readable
 
-* List hygiene and acquisition analysis
-* Provider mix reporting
-* ESP and gateway migration analysis
-* Deliverability investigations
-* Sales, audit, and compliance workflows
+---
 
-NOTE: This is not an email validation tool. It does not check mailbox existence.
+## Version History
+
+See `CHANGELOG.md` for detailed release notes.
+
+---
+
+## License
+
+Internal / private use unless otherwise specified.
+```
