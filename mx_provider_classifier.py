@@ -158,7 +158,7 @@ def extract_domain(value: str) -> Optional[str]:
     return d if DOMAIN_RE.match(d) else None
 
 
-def read_domains_from_file(path: str) -> List[str]:
+def read_domains_from_file(path: str, dedupe: bool = True) -> List[str]:
     domains: List[str] = []
     with open(path, "r", encoding="utf-8", errors="replace") as f:
         sample = f.read(4096)
@@ -177,7 +177,7 @@ def read_domains_from_file(path: str) -> List[str]:
                         if d:
                             domains.append(d)
                             break
-                return sorted(set(domains))
+                return sorted(set(domains)) if dedupe else domains
             except csv.Error:
                 f.seek(0)
 
@@ -196,7 +196,7 @@ def read_domains_from_file(path: str) -> List[str]:
                 if d2:
                     domains.append(d2)
 
-    return sorted(set(domains))
+    return sorted(set(domains)) if dedupe else domains
 
 
 # ----------------------------
@@ -268,13 +268,28 @@ def dated_output_name(input_path: str, result_type: str) -> str:
     return f"{today}-{result_type}-{base}.csv"
 
 
-def write_counts(path: str, provider_counts: Dict[str, int]) -> None:
-    rows = sorted(provider_counts.items(), key=lambda x: (-x[1], x[0].lower()))
+def write_counts(
+    path: str,
+    provider_domain_counts: Dict[str, int],
+    provider_record_counts: Dict[str, int],
+) -> None:
+    providers = set(provider_domain_counts) | set(provider_record_counts)
+
+    rows = []
+    for p in providers:
+        rows.append((
+            p,
+            provider_domain_counts.get(p, 0),
+            provider_record_counts.get(p, 0),
+        ))
+
+    # Sort by record_count desc, then domain_count desc, then provider name
+    rows.sort(key=lambda x: (-x[2], -x[1], x[0].lower()))
+
     with open(path, "w", encoding="utf-8", newline="") as f:
         w = csv.writer(f)
-        w.writerow(["provider", "domain_count"])
+        w.writerow(["provider", "domain_count", "record_count"])
         w.writerows(rows)
-
 
 def write_domains(
     path: str,
@@ -330,7 +345,8 @@ def main() -> int:
         return 2
 
     patterns = load_patterns(args.patterns)
-    domains = read_domains_from_file(input_path)
+    raw_domains = read_domains_from_file(input_path, dedupe=False)
+    domains = sorted(set(raw_domains))
 
     if not domains:
         print("No valid domains or emails found in input file.", file=sys.stderr)
@@ -352,8 +368,8 @@ def main() -> int:
 
             provider = classify_mx_hosts(mx_hosts, patterns)
 
-            # Null MX: preserve "." in output, but classify as "no mail"
-            if not provider and (err == "NoMail" or mx_hosts == ["."]):
+            # Null MX: domain explicitly does not accept mail (RFC 7505)
+            if not provider and err == "NoMail":
                 provider = "Bad Domain - No mail"
 
             # Map DNS failures with no MX to explicit "Bad Domain" buckets
@@ -364,21 +380,28 @@ def main() -> int:
             if not provider and mx_hosts:
                 provider = "Custom MX"
 
-            if provider:
-                domain_to_provider[domain] = provider
-            else:
-                # This should be rare now, but keep it for truly odd cases
-                unclassified.append((domain, best_pref, mx_hosts, err))
+            # Final fallback: keep everything counted, suppress unclassified file for now
+            if not provider:
+                provider = "Unclassified"
 
-    provider_counts: Dict[str, int] = {}
+            domain_to_provider[domain] = provider
+
+    # domain_count: how many unique domains mapped to each provider
+    provider_domain_counts: Dict[str, int] = {}
     for provider in domain_to_provider.values():
-        provider_counts[provider] = provider_counts.get(provider, 0) + 1
+        provider_domain_counts[provider] = provider_domain_counts.get(provider, 0) + 1
+
+    # record_count: how many input records (including duplicates) mapped to each provider
+    provider_record_counts: Dict[str, int] = {}
+    for d in raw_domains:
+        p = domain_to_provider.get(d, "Unclassified")
+        provider_record_counts[p] = provider_record_counts.get(p, 0) + 1
 
     out_counts = dated_output_name(input_path, "counts")
     out_domains = dated_output_name(input_path, "domains")
     # out_unclassified = dated_output_name(input_path, "unclassified")
 
-    write_counts(out_counts, provider_counts)
+    write_counts(out_counts, provider_domain_counts, provider_record_counts)
     write_domains(out_domains, domain_to_provider, domain_to_best_pref, domain_to_mx)
     # write_unclassified(out_unclassified, unclassified)
 
