@@ -9,11 +9,14 @@ MX Provider Classifier
   3) YYYY-MM-DD-unclassified-<original>.csv
 
 Patterns are loaded from a CSV file so you can extend providers easily.
+
+Version: v0.1.3
 """
 
 from __future__ import annotations
 
 import argparse
+import ipaddress
 import csv
 import datetime as dt
 import os
@@ -24,6 +27,7 @@ from typing import Dict, List, Optional, Tuple
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+VERSION = "0.1.3"
 
 try:
     import dns.resolver
@@ -124,6 +128,10 @@ def provider_from_dns_error(err: Optional[str]) -> Optional[str]:
         return "Bad Domain - NoNameservers"
     if err == "NoMail":
         return "Bad Domain - No mail"
+    if err == "LocalhostMX":
+        return "Bad Domain - Localhost MX"
+    if err == "InvalidMXTarget":
+        return "Bad Domain - Invalid MX Target"
     return "Bad Domain - DNS Error"
 
 def is_subdomain(child: str, parent: str) -> bool:
@@ -152,10 +160,41 @@ def extract_domain(value: str) -> Optional[str]:
     m = EMAIL_RE.match(v)
     if m:
         d = m.group(1).strip().lower().rstrip(".")
-        return d if DOMAIN_RE.match(d) else None
+        if d in {"localhost", "localhost.localdomain"}:
+            return d
+        if d.startswith("[") and d.endswith("]"):
+            d = d[1:-1]
+        return d if DOMAIN_RE.match(d) or is_ip_literal(d) else None
 
     d = v.lower().rstrip(".")
-    return d if DOMAIN_RE.match(d) else None
+    if d in {"localhost", "localhost.localdomain"}:
+        return d
+    if d.startswith("[") and d.endswith("]"):
+        d = d[1:-1]
+    return d if DOMAIN_RE.match(d) or is_ip_literal(d) else None
+
+
+def is_ip_literal(value: str) -> bool:
+    try:
+        ipaddress.ip_address(value)
+        return True
+    except ValueError:
+        return False
+
+
+def is_internal_only_domain(domain: str) -> bool:
+    d = domain.lower().rstrip(".")
+    internal_suffixes = (
+        ".local",
+        ".localdomain",
+        ".internal",
+        ".lan",
+        ".home",
+        ".home.arpa",
+        ".corp",
+        ".intranet",
+    )
+    return d.endswith(internal_suffixes)
 
 
 def read_domains_from_file(path: str, dedupe: bool = True) -> List[str]:
@@ -239,6 +278,14 @@ def lookup_mx_highest_priority(
         best_pref = min(pref for pref, _ in records)
         best_hosts = sorted({host for pref, host in records if pref == best_pref})
 
+        # Localhost MX: explicitly broken / internal-only MX target
+        if best_hosts == ["localhost"] or best_hosts == ["localhost.localdomain"]:
+            return domain, best_pref, best_hosts, "LocalhostMX"
+
+        # Invalid placeholder / malformed MX targets
+        if best_hosts == ["~"]:
+            return domain, best_pref, best_hosts, "InvalidMXTarget"
+
         # If the highest-priority MX is a Null MX ("."), the domain does not accept mail.
         if best_hosts == ["."]:
             return domain, best_pref, best_hosts, "NoMail"
@@ -264,8 +311,9 @@ def lookup_mx_highest_priority(
 
 def dated_output_name(input_path: str, result_type: str) -> str:
     base = os.path.basename(input_path)
+    name, _ = os.path.splitext(base)
     today = dt.date.today().strftime("%Y-%m-%d")
-    return f"{today}-{result_type}-{base}.csv"
+    return f"{today}-{result_type}-{name}.csv"
 
 
 def write_counts(
@@ -323,7 +371,7 @@ def write_unclassified(
 # ----------------------------
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="Classify domains by MX provider patterns (highest priority MX only).")
+    ap = argparse.ArgumentParser(description=f"MX Provider Classifier {VERSION}: classify domains by MX provider patterns (highest priority MX only).")
     ap.add_argument("--input", default=None, help="Path to input file. If omitted, you'll be prompted.")
     ap.add_argument("--patterns", default=os.path.join(SCRIPT_DIR, "provider_patterns.csv"), help="CSV file with MX classification patterns.")
     ap.add_argument("--nameserver", default=None, help="Optional DNS server IP to query (ex: 8.8.8.8).")
@@ -359,8 +407,29 @@ def main() -> int:
     domain_to_provider: Dict[str, str] = {}
     unclassified: List[Tuple[str, Optional[int], List[str], Optional[str]]] = []
 
+    # Handle local-only domains, IP literals, and internal-only domains before DNS lookup
+    special_domains = {"localhost", "localhost.localdomain"}
+    dns_domains = [
+        d for d in domains
+        if d not in special_domains and not is_ip_literal(d) and not is_internal_only_domain(d)
+    ]
+
+    for domain in domains:
+        if domain in special_domains:
+            domain_to_best_pref[domain] = None
+            domain_to_mx[domain] = []
+            domain_to_provider[domain] = "Bad Domain - Localhost"
+        elif is_ip_literal(domain):
+            domain_to_best_pref[domain] = None
+            domain_to_mx[domain] = []
+            domain_to_provider[domain] = "Invalid Input - IP Literal"
+        elif is_internal_only_domain(domain):
+            domain_to_best_pref[domain] = None
+            domain_to_mx[domain] = []
+            domain_to_provider[domain] = "Invalid Input - Internal Domain"
+
     with ThreadPoolExecutor(max_workers=max(1, args.workers)) as ex:
-        futures = [ex.submit(lookup_mx_highest_priority, d, resolver) for d in domains]
+        futures = [ex.submit(lookup_mx_highest_priority, d, resolver) for d in dns_domains]
         for fut in as_completed(futures):
             domain, best_pref, mx_hosts, err = fut.result()
             domain_to_best_pref[domain] = best_pref
@@ -368,9 +437,9 @@ def main() -> int:
 
             provider = classify_mx_hosts(mx_hosts, patterns)
 
-            # Null MX: domain explicitly does not accept mail (RFC 7505)
-            if not provider and err == "NoMail":
-                provider = "Bad Domain - No mail"
+            # Special MX conditions that should not become Custom MX
+            if not provider and err in {"NoMail", "LocalhostMX", "InvalidMXTarget"}:
+                provider = provider_from_dns_error(err)
 
             # Map DNS failures with no MX to explicit "Bad Domain" buckets
             if not provider and err and not mx_hosts:
@@ -380,7 +449,7 @@ def main() -> int:
             if not provider and mx_hosts:
                 provider = "Custom MX"
 
-            # Final fallback: keep everything counted, suppress unclassified file for now
+            # Final fallback: keep everything counted
             if not provider:
                 provider = "Unclassified"
 

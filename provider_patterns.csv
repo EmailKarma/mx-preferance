@@ -54,7 +54,6 @@ ExchangeDefender,suffix,exchangedefender.com,20,ExchangeDefender email security 
 Fasthosts,suffix,livemail.co.uk,10,Fasthosts UK-based internet hosting provider
 Fastmail,suffix,messagingengine.com,20,Fastmail inbound MX
 FireEye,suffix,fireeyecloud.com,20,Trellix / FireEye email security
-Fortinet,suffix,1.fortimailcloud.com,10,FortiMail Cloud
 Fortinet,suffix,fortimailcloud.com,20,Fortinet FortiMail Cloud email security
 Forward Email,suffix,forwardemail.net,60,Forward Email alias and forwarding service
 Fraunhofer Institute Mail,suffix,fraunhofer.de,50,Fraunhofer centralized institutional email system
@@ -67,7 +66,6 @@ Google Workspace,regex,^_dc-mx\.[a-f0-9]+\.,10,Google Workspace Domain Connect M
 Google Workspace,suffix,aspmx.google.com,10,"Google Workspace MX (legacy, no .l.)"
 Google Workspace,suffix,aspmx.i.google.com,10,"Google Workspace MX (regional, .i.google.com)"
 Google Workspace,suffix,aspmx.l.google.com,10,Primary Google Workspace MX (standard)
-Google Workspace,suffix,smtp.goog,10,Google Workspace relay endpoint (smtp.google.com)
 Google Workspace,exact,smtp.google.com,10,Google Workspace relay endpoint (smtp.google.com)
 Google Workspace,suffix,aspmx2.googlemail.com,11,Google Workspace additional MX (aspmx2.googlemail.com)
 Google Workspace,suffix,aspmx3.googlemail.com,11,Google Workspace additional MX (aspmx3.googlemail.com)
@@ -91,7 +89,7 @@ Internet Initiative Japan,suffix,asahinet-mx-v4.xspmail.jp,10,Japaneese Internet
 Ionos,suffix,ionos.de,10,Hosting provider
 Ionos,suffix,ionos.es,10,Hosting provider
 Ionos,suffix,ionos.fr,10,Hosting provider
-Ionos,suffix,mail.com,10,Hosting provider
+Ionos,regex,(^|\.)mail\.com$,10,Hosting provider
 Ionos,suffix,mx00.1and1.co.uk,10,Hosting provider
 Ionos,suffix,mx00.1and1.fr,10,Hosting provider
 Ionos,suffix,mx00.ionos.co.uk,10,Hosting provider
@@ -182,7 +180,6 @@ SiteMail,suffix,mx.siteprotect.com,10,email security services
 SkyMail,suffix,skymail.net.br,60,SkyMail hosted email (Brazil)
 Sonic,suffix,mx.sonic.net,60,Sonic.net ISP inbound mail
 Sophos,suffix,sophos.com,20,"Seen 291 domains, ex: mx-01-us-west-2.prod.hydra.sophos.com"
-SpamExperts,suffix,mx.spamexperts.com,10,email security services
 SpamExperts,suffix,spamexperts.com,20,SpamExperts inbound email security platform
 Spamhaus,suffix,spamteq.com,10,Spam filtering gateway
 Spamhaus,suffix,spamhaus.org,50,"Unusual as MX, review if found"
@@ -191,6 +188,7 @@ SpamHero,suffix,mxthunder.com,20,"Seen 320 domains, ex: besenpartners-com.p10.mx
 Spectrum,suffix,charter.net,60,Charter / Spectrum business mail MX
 SUNET Mail Filtering,regex,^mailfilter-ng-\d+\.sunet\.se$,50,SUNET centralized mail filtering for Swedish research and education
 Supremebox,suffix,supremebox.com,60,Supremebox hosted email
+Suspicious Domain,suffix,recoverhost.com,300,Recover Host - review closely
 Swiss Government,suffix,mail.admin.ch,10,Federal administration of Switzerland
 Swisscom Mail,suffix,swisscom.com,60,Swisscom hosted enterprise and ISP email
 TDS Telecom,suffix,tds.net,60,TDS Telecom ISP email
@@ -216,9 +214,7 @@ Word to the Wise,suffix,wordtothewise.com,50,Private domain
 XSP Mail,suffix,xspmail.jp,60,Japanese ISP mail platform (XSP Mail)
 Yahoo,suffix,yahoodns.net,10,"Handles yahoo.com, aol.com, verizon.net, and others"
 Yandex,suffix,mx.yandex.net,10,Russian Email Provider
-Yandex,suffix,mx.yandex.ru,10,Russian Email Provider
-Yandex Mail,suffix,yandex.ru,60,Yandex Mail MX
-Zoho,suffix,mx.zoho.com,10,Indian based Email Provider
+Yandex,suffix,yandex.ru,60,Yandex Mail MX
 Zoho,suffix,mx.zoho.eu,10,Indian based Email Provider
 Zoho,suffix,mx.zoho.in,10,Indian based Email Provider
 Zoho,suffix,mx.zohomail.com,10,Indian based Email Provider
