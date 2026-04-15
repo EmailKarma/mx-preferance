@@ -2,7 +2,50 @@
 
 All notable changes to this project will be documented in this file.
 
-This project follows semantic versioning.
+---
+
+## v0.1.3 - 2026-04-15
+
+### Added
+- Detection of IP literals (IPv4 and IPv6)
+- Support for bracketed IPv6 inputs (`[2001:db8::1]`)
+- Internal domain detection, including:
+  - `.local`
+  - `.localdomain`
+  - `.internal`
+  - `.lan`
+  - `.home`
+  - `.home.arpa`
+  - `.corp`
+  - `.intranet`
+
+### Improved
+- Domain extraction logic for mixed input formats
+- Input validation to reduce unnecessary DNS lookups
+- Classification accuracy for non-routable and invalid inputs
+
+### Fixed
+- Prevented IP literals from being processed as valid domains
+- Reduced misclassification of invalid inputs as `Custom MX`
+
+### Known Issues
+- MX targets such as `localhost` may still be classified as `Custom MX`
+- Invalid MX hostnames (e.g., `~`) are not explicitly handled
+- Provider classification depends on pattern coverage
+
+---
+
+## v0.1.2
+
+### Added
+- MX lookup and provider classification logic
+- CSV output with date-based naming
+- Pattern-based provider detection
+
+### Features
+- Batch processing of domains and email addresses
+- DNS-based MX resolution
+- Fallback classification as `Custom MX`
 
 ---
 
