@@ -20,6 +20,7 @@ BlueTie,suffix,bluetie.com,60,BlueTie hosted email MX
 Broadcom,suffix,messagelabs.com,10,"Broadcom, Symantic"
 Carrierzone,suffix,carrierzone.com,20,"Seen 244 domains, ex: mx1c45.carrierzone.com"
 Charter Communications,suffix,biz.rr.com,60,Spectrum / RoadRunner business email
+CherryRoad,suffix,cherryroad.com,20,CherryRoad hosted email security platform
 Cisco,suffix,mxrecord.io,20,"Seen 330 domains, ex: mailstream-east.mxrecord.io"
 Cisco,suffix,mxrecord.mx,60,Mailstream / mxrecord.mx hosted email
 CleanMX.pt,suffix,mx1.cleanmx.pt,10,filtering and security services provided by CleanMX.pt
@@ -58,6 +59,7 @@ easyDNS,suffix,zoneedit.com,60,ZoneEdit hosted email
 EDU,suffix,edu,95,Fallback for .edu domains with no identified provider
 EDU,suffix,edu.tr,60,edu - Turkey
 EDU,suffix,edu.tw,60,edu - Taiwan
+ESVA Cloud,suffix,esvacloud.com,20,ESVA hosted email security platform
 European Parliament Mail,suffix,ep.europa.eu,50,European Parliament centralized institutional email platform
 EveryCloud,suffix,everycloudtech.us,20,EveryCloud hosted email security platform
 Everyone.net,suffix,everyone.net,60,Everyone.net hosted email
@@ -65,6 +67,7 @@ Evonik Mail Gateway,regex,^mailin-ip\d+\.evonik\.com$,50,Evonik inbound mail gat
 ExchangeDefender,suffix,exchangedefender.com,20,ExchangeDefender email security gateway
 Fasthosts,suffix,livemail.co.uk,10,Fasthosts UK-based internet hosting provider
 Fastmail,suffix,messagingengine.com,20,Fastmail inbound MX
+FatCow,suffix,fatcow.com,60,FatCow hosted email infrastructure
 FireEye,suffix,fireeyecloud.com,20,Trellix / FireEye email security
 FireEye,suffix,fireeyegov.com,20,FireEye Government email security platform
 Fortinet FortiMail,suffix,fortimail.com,20,Fortinet FortiMail appliance or hosted email security
@@ -143,6 +146,7 @@ KAS Media GmbH,suffix,kasserver.com,60,all-inkl.com hosted email infrastructure 
 KDDI,suffix,biglobe.ne.jp,10,subsidiary of KDDI Corporation
 KDDI,suffix,zaq.ne.jp,60,"JCOM Co., Ltd. (subsidiary of KDDI)"
 Leaseweb,suffix,leaseweb.com,10,Leaseweb hosting
+Legacy Microsoft Hosted,regex,^.*\.pamx1\.hotmail\.com$,60,Legacy Microsoft hosted email infrastructure
 LocalNet,suffix,localnet.com,60,LocalNet ISP / hosted email
 Locaweb,suffix,kinghost.net,60,KingHost hosted email (Brazil)
 Locaweb,suffix,locaweb.com.br,60,Locaweb hosted email (Brazil)
@@ -158,9 +162,11 @@ MailGate SC,regex,^mx\d+\.secure-mailgate\.com$,20,Secure-Mailgate email securit
 MailGuard,suffix,mailguard.com.au,20,MailGuard email security platform
 Mailgun,suffix,mailgun.org,20,"Mailgun inbound MX (mxa/mxb.mailgun.org) - Unusual as MX, review if found"
 Mailhop,suffix,mx.mailhop.org,10,email hosting service
+MailHop,suffix,mailhop.org,60,MailHop hosted email routing service
 MailHostBox,suffix,mailhostbox.com,60,MailHostBox hosted email (reseller platform)
 Mailinblack,suffix,mailinblack.com,20,Mailinblack email security and filtering platform
 Mailkit,suffix,mailkit.net,10,Mailkit platform
+MailMarshal,suffix,mailmarshal.cloud,20,MailMarshal hosted email security platform
 Mailprotector,suffix,cloudfilter.net,20,CloudFilter email security platform
 Mailprotector,suffix,emailservice.io,10,Mailprotector
 Mailprotector,suffix,mailsecurity.io,20,MailSecurity.io inbound email protection
@@ -202,6 +208,7 @@ OneNet Global,suffix,oneb.net,60,OneB hosted email
 OpenText,suffix,spamh.com,10,OpenText formerly Zix
 Openwave,suffix,cloud.openwave.ai,60,Openwave hosted email infrastructure
 Open-Xchange,suffix,oxcs.net,20,"Seen 1358 domains, ex: mx001.netsol.xion.oxcs.net"
+Orange,suffix,orange.fr,60,Orange hosted email infrastructure
 Outlook,suffix,olc.protection.outlook.com,10,"Handles outlook.com, hotmail.com, msn.com, etc..."
 OVH,suffix,mail.ovh.net,1,OVH Hosting
 OVH,suffix,mx1.ovh.net,1,OVH Hosting
@@ -264,11 +271,13 @@ Trend Micro,suffix,trendmicro.eu,20,"Seen 608 domains, ex: lne.in.tmes.trendmicr
 United Domains Mail,suffix,udag.de,60,United Domains hosted email infrastructure
 United Online,suffix,untd.com,10,United Online
 University Hospitals,suffix,uhserver.com,60,UHServer hosted email
+Upstream Security,suffix,upstreamsecurity.net,20,Upstream Security email security platform
 Utande,suffix,utande.co.zw,60,Regional ISP mail provider
 VadeSecure,suffix,cloud.vadesecure.com,10,mx01.cloud.vadesecure.com;mx02.cloud.vadesecure.com;mx03.cloud.vadesecure.com;mx04.cloud.vadesecure.com
 Validity Everest,suffix,everest.validity.com,20,Validity Everest hosted email security platform
 Whidbey Telecom,suffix,whidbey.net,60,Whidbey Telecom ISP email
 Word to the Wise,suffix,wordtothewise.com,50,Private domain
+Xcitium,suffix,xcitium.com,20,Xcitium hosted email security platform
 XSP Mail,suffix,xspmail.jp,60,Japanese ISP mail platform (XSP Mail)
 Yahoo,suffix,yahoodns.net,10,"Handles yahoo.com, aol.com, verizon.net, and others"
 Yahoo Japan,suffix,yahoo.co.jp,10,Yahoo Japan mail infrastructure
