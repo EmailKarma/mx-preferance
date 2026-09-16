@@ -21,6 +21,7 @@ Broadcom,suffix,messagelabs.com,10,"Broadcom, Symantic"
 Carrierzone,suffix,carrierzone.com,20,"Seen 244 domains, ex: mx1c45.carrierzone.com"
 Charter Communications,suffix,biz.rr.com,60,Spectrum / RoadRunner business email
 CherryRoad,suffix,cherryroad.com,20,CherryRoad hosted email security platform
+Cisco,suffix,iphmx.com,10,Cisco Essentials
 Cisco,suffix,mxrecord.io,20,"Seen 330 domains, ex: mailstream-east.mxrecord.io"
 Cisco,suffix,mxrecord.mx,60,Mailstream / mxrecord.mx hosted email
 CleanMX.pt,suffix,mx1.cleanmx.pt,10,filtering and security services provided by CleanMX.pt
@@ -161,8 +162,8 @@ MailControl,suffix,mailcontrol.com,20,MailControl email security platform
 MailGate SC,regex,^mx\d+\.secure-mailgate\.com$,20,Secure-Mailgate email security gateway
 MailGuard,suffix,mailguard.com.au,20,MailGuard email security platform
 Mailgun,suffix,mailgun.org,20,"Mailgun inbound MX (mxa/mxb.mailgun.org) - Unusual as MX, review if found"
-Mailhop,suffix,mx.mailhop.org,10,email hosting service
 MailHop,suffix,mailhop.org,60,MailHop hosted email routing service
+Mailhop,suffix,mx.mailhop.org,10,email hosting service
 MailHostBox,suffix,mailhostbox.com,60,MailHostBox hosted email (reseller platform)
 Mailinblack,suffix,mailinblack.com,20,Mailinblack email security and filtering platform
 Mailkit,suffix,mailkit.net,10,Mailkit platform
@@ -216,12 +217,12 @@ Pair Networks,suffix,pair.com,60,Pair Networks hosted email infrastructure
 Parked Domain,suffix,park-mx.above.com,10,Above.net parked/expired domain
 Plala,suffix,plala.or.jp,60,Plala Japanese ISP mail
 Proofpoint,regex,^mx\d+\.ppsmtp\.com$,20,Proofpoint PPSMTP email security gateway
-Proofpoint,suffix,iphmx.com,10,Proofpoint Essentials
 Proofpoint,suffix,ppe-hosted.com,20,"Seen 8089 domains, ex: mx1-us1.ppe-hosted.com"
 Proofpoint,suffix,pphosted.com,10,Proofpoint Enterprise
 Proton Mail,suffix,protonmail.ch,10,Proton Mail inbound MX
 Proton Mail,suffix,simplelogin.co,60,SimpleLogin email alias and forwarding service
 Proximus,suffix,proximus.be,60,Proximus hosted email infrastructure
+purelymail,suffix,purelymail.com,50,purelymail MX
 QQ Mail,suffix,qq.com,60,Tencent QQ Mail MX (mxbiz*.qq.com)
 Rackspace,suffix,emailsrvr.com,20,"Seen 1040 domains, ex: mx1.emailsrvr.com"
 Raptor Email Security,suffix,raptoremailsecurity.com,20,Inbound security gateway
