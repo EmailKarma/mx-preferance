@@ -10,7 +10,7 @@ MX Provider Classifier
 
 Patterns are loaded from a CSV file so you can extend providers easily.
 
-Version: v0.1.3
+Version: v0.1.4
 """
 
 from __future__ import annotations
@@ -27,7 +27,7 @@ from typing import Dict, List, Optional, Tuple
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-VERSION = "0.1.3"
+VERSION = "0.1.4"
 
 try:
     import dns.resolver
@@ -53,7 +53,7 @@ class ProviderPattern:
         p = self.pattern.rstrip(".").lower()
 
         if self.match_type == "suffix":
-            return h.endswith(p)
+            return h == p or h.endswith("." + p)
         if self.match_type == "contains":
             return p in h
         if self.match_type == "exact":
@@ -73,19 +73,26 @@ def load_patterns(patterns_csv_path: str) -> List[ProviderPattern]:
         if missing:
             raise ValueError(f"patterns CSV missing required columns: {sorted(missing)}")
 
-        for row in reader:
+        for line_number, row in enumerate(reader, start=2):
             provider = (row.get("provider") or "").strip()
             match_type = (row.get("match_type") or "").strip().lower()
             pattern = (row.get("pattern") or "").strip()
             if not provider or not match_type or not pattern:
-                continue
+                raise ValueError(f"patterns CSV row {line_number}: provider, match_type, and pattern are required")
+            if match_type not in {"exact", "regex", "suffix", "contains"}:
+                raise ValueError(f"patterns CSV row {line_number}: unsupported match_type {match_type!r}")
+            if match_type == "regex":
+                try:
+                    re.compile(pattern, flags=re.IGNORECASE)
+                except re.error as exc:
+                    raise ValueError(f"patterns CSV row {line_number}: invalid regex {pattern!r}: {exc}") from exc
 
             priority_str = (row.get("priority") or "").strip()
             notes = (row.get("notes") or "").strip()
             try:
                 priority = int(priority_str) if priority_str else 100
-            except ValueError:
-                priority = 100
+            except ValueError as exc:
+                raise ValueError(f"patterns CSV row {line_number}: invalid priority {priority_str!r}") from exc
 
             patterns.append(ProviderPattern(
                 provider=provider,
@@ -95,7 +102,10 @@ def load_patterns(patterns_csv_path: str) -> List[ProviderPattern]:
                 notes=notes,
             ))
 
-    patterns.sort(key=lambda x: x.priority)
+    # Lower priority wins. Within a priority, prefer stronger match types and
+    # longer patterns. Stable sorting preserves CSV order for remaining ties.
+    match_type_rank = {"exact": 0, "regex": 1, "suffix": 2, "contains": 3}
+    patterns.sort(key=lambda x: (x.priority, match_type_rank[x.match_type], -len(x.pattern)))
     return patterns
 
 
@@ -392,7 +402,11 @@ def main() -> int:
         print("Create it using the sample provider_patterns.csv shown earlier.", file=sys.stderr)
         return 2
 
-    patterns = load_patterns(args.patterns)
+    try:
+        patterns = load_patterns(args.patterns)
+    except (OSError, ValueError, csv.Error) as exc:
+        print(f"Unable to load provider patterns: {exc}", file=sys.stderr)
+        return 2
     raw_domains = read_domains_from_file(input_path, dedupe=False)
     domains = sorted(set(raw_domains))
 
@@ -435,11 +449,11 @@ def main() -> int:
             domain_to_best_pref[domain] = best_pref
             domain_to_mx[domain] = mx_hosts
 
-            provider = classify_mx_hosts(mx_hosts, patterns)
-
-            # Special MX conditions that should not become Custom MX
-            if not provider and err in {"NoMail", "LocalhostMX", "InvalidMXTarget"}:
+            # Invalid MX conditions override provider patterns.
+            if err in {"NoMail", "LocalhostMX", "InvalidMXTarget"}:
                 provider = provider_from_dns_error(err)
+            else:
+                provider = classify_mx_hosts(mx_hosts, patterns)
 
             # Map DNS failures with no MX to explicit "Bad Domain" buckets
             if not provider and err and not mx_hosts:

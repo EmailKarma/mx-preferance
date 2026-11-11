@@ -1,11 +1,16 @@
 provider,match_type,pattern,priority,notes
+33Mail,suffix,ec2.33mail.com,10,Email alias and forwarding service
 Abusix,suffix,void.blackhole.mx,0,"Unusual as MX, review if found"
+ABV.bg,suffix,abv.bg,10,Bulgarian mailbox service
+addy.io,suffix,anonaddy.me,10,Email alias forwarding service
 Adobe,suffix,campaign.adobe.com,10,"Adobe inbound reply handling MX - Unusual as MX, review if found"
 Alibaba Cloud (HiChina),suffix,mxhichina.com,80,Alibaba HiChina MX infrastructure (mx*.mxhichina.com)
 Alibaba Cloud Mail,suffix,mail.alibaba.com,80,Alibaba mail MX (mx*.mail.alibaba.com)
 Alibaba Cloud Mail,suffix,qiye.aliyun.com,80,Alibaba Cloud enterprise mail MX (mx*.qiye.aliyun.com)
+Alternative ID,suffix,alternativeid.com,10,Email alias infrastructure
+Amazon,suffix,amazonses.com,10,"Amazon SES infrastructure; unusual as an inbound MX, review if observed"
 Amazon,suffix,amazon-smtp.amazon.com,10,amazon-smtp.amazon.com
-Amazon SES,suffix,amazonaws.com,30,Amazon SES inbound SMTP
+Amazon SES,regex,^inbound-smtp\.[a-z0-9-]+\.amazonaws\.com$,10,Amazon SES regional inbound receiving endpoint
 Apple,suffix,apple.com,10,Apple Corp mail
 Apple,suffix,mail.icloud.com,10,Apple iCloud Mail
 Appriver,suffix,arsmtp.com,20,"Seen 3333 domains, ex: cityofbinghamton-gov.mx1.arsmtp.com"
@@ -15,10 +20,17 @@ AT&T Business Mail,suffix,edge.unified.services,60,AT&T / Unified enterprise mai
 AV-MX,suffix,av-mx.com,20,Email security and filtering platform
 AWeber,suffix,aweber.com,10,ESP inbound handling
 Barracuda,suffix,barracudanetworks.com,20,Barracuda Email Security (d*.ess.barracudanetworks.com)
+Bell Canada,suffix,bell.net,10,Bell Canada ISP email
+Bell Canada,suffix,sympatico.ca,10,Bell Canada legacy ISP email
 Bird,suffix,edatasource.com,20,Bird (formerly SparkPost) email security and deliverability platform
+Blacknight,suffix,smtp1r.cp.blacknight.com,10,Blacknight email hosting
 BlueTie,suffix,bluetie.com,60,BlueTie hosted email MX
 Broadcom,suffix,messagelabs.com,10,"Broadcom, Symantic"
+Bump Email,suffix,bumpemail.com,10,Bump Email alias service
+Burner Mail,suffix,burnermail.io,10,Burner Mail alias service
+CaraMail,suffix,caramail.com,10,CaraMail mailbox service
 Carrierzone,suffix,carrierzone.com,20,"Seen 244 domains, ex: mx1c45.carrierzone.com"
+CenturyLink,suffix,centurylink.net,10,US based cable internet provider
 Charter Communications,suffix,biz.rr.com,60,Spectrum / RoadRunner business email
 CherryRoad,suffix,cherryroad.com,20,CherryRoad hosted email security platform
 Cisco,suffix,iphmx.com,10,Cisco Essentials
@@ -30,29 +42,48 @@ Cloudflare,suffix,mx.cloudflare.net,15,Cloudflare Email Routing (route*.mx.cloud
 Cloudiance,suffix,zmailcloud.com,60,ZMail Cloud hosted email Platform: Zimbra/Synacor
 Com Net,suffix,cniteam.com,60,CNI Team hosted email infrastructure
 Comcast,suffix,mxge.comcast.net,5,Comcast mail 
+Cox Communications,suffix,coxmail.com,10,Cox ISP email
 DaemonMail,suffix,daemonmail.net,60,DaemonMail hosted email / filtering
 Datacenter West,suffix,datacenterwest.com,60,Datacenter West hosted email infrastructure
 DATEV eG,suffix,maildomain.datevnet.de,10,German software and IT service provider; professionals
+Daum / Kakao,suffix,daum.net,10,Daum email service operated by Kakao
 Dealer Spike,suffix,adams.dealerspike.com,10,digital marketing and website provider for vehicle dealerships
 Deutsche Telekom,regex,^mailin\d+\.telekom\.de$,60,Deutsche Telekom inbound MX (mailinNN.telekom.de)
 DFN Mail Service,suffix,srv.dfn.de,60,DFN centralized mail service for German research institutions
+Disposable Email Service,regex,^(?:em|mx)[0-9]+\.mainnetmail\.com$,10,MainNetMail temporary email infrastructure
+Disposable Email Service,regex,^(?:em|srv)[0-9]+\.rejecthost\.com$,10,RejectHost temporary email infrastructure
 Disposable Email Service,regex,^mail\.(wabblywabble|wallywatts)\.com$,60,Shared hosted mail platform using branded MX domains
+Disposable Email Service,regex,^mx[0-9]+\.mohmal\.im$,10,Mohmal temporary email service
+Disposable Email Service,regex,^recv[0-9]+\.erinn\.biz$,10,InstAddr numbered receiving servers
+Disposable Email Service,suffix,beavis99.com,10,Beavis99 shared temporary email infrastructure
+Disposable Email Service,suffix,beavis99.net,10,Beavis99 shared temporary email infrastructure
+Disposable Email Service,suffix,brushemail.com,10,BrushEmail temporary email infrastructure
+Disposable Email Service,suffix,catchservers.com,10,Shared temporary email receiving infrastructure
+Disposable Email Service,suffix,catchservers.net,10,Shared temporary email receiving infrastructure
+Disposable Email Service,suffix,erinn.biz,10,InstAddr disposable email infrastructure
 Disposable Email Service,suffix,ese.kr,10,ESE Disposable Email Services
 Disposable Email Service,suffix,gourmet7.spamgourmet.com,10,Spamgourmet Disposable Email Service
 Disposable Email Service,suffix,mail.cleantempmail.com,10,Disposable Email Services
 Disposable Email Service,suffix,mail.temp-mail.ai,10,Disposable Email Services
 Disposable Email Service,suffix,mail.tempmail123.com,10,Disposable Email Services
+Disposable Email Service,suffix,mail.tm,10,Mail.tm temporary email service
 Disposable Email Service,suffix,mailinator.com,10,Mailinator Disposable Services
+Disposable Email Service,suffix,mainnetmail.com,10,Shared temporary email receiving infrastructure
 Disposable Email Service,suffix,mx.breakthur.com,10,BreakThru Disposable Email Services
 Disposable Email Service,suffix,mx.discard.email,10,Discard Disposable Email Services
 Disposable Email Service,suffix,mx.generic-isp.com,10,"Unusual as MX, review if found"
 Disposable Email Service,suffix,mx.mail-temporaire.fr,10,Disposable Email Service
 Disposable Email Service,suffix,mx.powered.name,10,"Unusual as MX, review if found"
+Disposable Email Service,suffix,rejecthost.com,10,Shared temporary email receiving infrastructure
+Disposable Email Service,suffix,tempinbox.xyz,10,TempInbox temporary email service
+Disposable Email Service,suffix,tempmail.de,10,TempMail.de temporary email service
+Disposable Email Service,suffix,tempyx.com,10,Tempyx temporary email service
 Disposable Email Service,suffix,unstablemail.com,0,Unstablemail.com disposable email
 dpoczta.pl,suffix,dpoczta.pl,10,Polish provider
 DreamHost,suffix,dreamhost.com,60,DreamHost hosted email MX
 DTS Security,suffix,dts-security.de,20,DTS Security email security and filtering platform
 DuckDuckGo,suffix,duck.com,60,DuckDuckGo Email Protection forwarding service
+Dynadot,suffix,parkmail.dynadot.com,10,Dynadot email parking
 EarthLink,suffix,earthlink-vadesecure.net,60,EarthLink mail protected by Vade Secure
 Eastlink,suffix,eastlink.ca,60,Eastlink ISP email (Canada)
 easyDNS,suffix,easydns.com,60,easyDNS email and DNS-hosted mail services
@@ -82,7 +113,7 @@ Gmail,contains,gmail-smtp-in.l.google.com,10,gmail.com and googlemail.com consum
 GMX,suffix,gmx.net,10,United Internet GMX
 GoDaddy,suffix,secureserver.net,10,Catches smtp.secureserver.net and mailstore*.secureserver.net
 Golden West Technologies,suffix,ispservices.us,60,ISPServices hosted email
-Google Workspace,exact,smtp.google.com,10,Google Workspace relay endpoint (smtp.google.com)
+Google Workspace,exact,smtp.google.com,10,Google Workspace current MX endpoint
 Google Workspace,regex,^_dc-mx\.[a-f0-9]+\.,10,Google Workspace Domain Connect MX (_dc-mx.<hash>.<domain>)
 Google Workspace,regex,^alt[0-9]+\.aspmx\.google\.com$,12,"Google Workspace alternate MX (legacy, alt*.aspmx.google.com)"
 Google Workspace,regex,^alt[0-9]+\.aspmx\.i\.google\.com$,12,"Google Workspace alternate MX (regional, alt*.aspmx.i.google.com)"
@@ -119,6 +150,7 @@ Hornet Security,suffix,antispameurope.com,20,AntiSpam Europe email security and 
 Hornet Security,suffix,hornetsecurity.com,10,Hornet Security
 HostedMXServer,suffix,hostedmxserver.com,60,HostedMXServer hosted email infrastructure
 Hostinger,suffix,hostinger.com,60,Hostinger hosted email MX
+Hostinger,suffix,hostinger.fr,10,Hostinger email hosting
 Hostnet,suffix,hostnet.nl,60,Dutch hosting provider
 Hostopia,suffix,megamailservers.com,60,MegaMailServers hosted mail infrastructure
 Hover,suffix,hostedemail.com,20,"Seen 240 domains, ex: mx.hover.com.cust.hostedemail.com"
@@ -127,7 +159,9 @@ Ignite Mail,suffix,ignite.co.uk,60,Ignite managed email platform (clustered MX)
 IK2,suffix,ik2.com,10,email security services
 ImproveMX,suffix,improvmx.com,60,ImproveMX hosted email forwarding service
 Inbox.com,suffix,atmailcloud.com,60,Atmail Cloud hosted email platform
+Inbox.eu,suffix,inbox.eu,10,Inbox.eu email service
 Infomaniak,suffix,infomaniak.ch,60,Infomaniak hosted email (Switzerland)
+Interia,suffix,interia.pl,10,Polish mailbox service
 Intermedia,suffix,serverdata.net,20,"Seen 749 domains, ex: east.smtp.mx.o365.serverdata.net"
 Internet Initiative Japan,suffix,asahinet-mx-v4.xspmail.jp,10,Japaneese Internet provider (IIJ)
 Ionos,regex,(^|\.)mail\.com$,10,Hosting provider
@@ -136,6 +170,7 @@ Ionos,suffix,ionos.com,20,"Seen 778 domains, ex: mx00.ionos.com"
 Ionos,suffix,ionos.de,10,Hosting provider
 Ionos,suffix,ionos.es,10,Hosting provider
 Ionos,suffix,ionos.fr,10,Hosting provider
+Ionos,suffix,kundenserver.de,10,IONOS hosted email infrastructure
 Ionos,suffix,mx00.1and1.co.uk,10,Hosting provider
 Ionos,suffix,mx00.1and1.fr,10,Hosting provider
 Ionos,suffix,mx00.ionos.co.uk,10,Hosting provider
@@ -146,6 +181,8 @@ ISPN,suffix,ispn.net,60,ISPN Network Services regional ISP mail
 KAS Media GmbH,suffix,kasserver.com,60,all-inkl.com hosted email infrastructure (kasserver.com)
 KDDI,suffix,biglobe.ne.jp,10,subsidiary of KDDI Corporation
 KDDI,suffix,zaq.ne.jp,60,"JCOM Co., Ltd. (subsidiary of KDDI)"
+Kinetic,suffix,windstream.net,10,US based email provider
+La Poste,suffix,laposte.net,10,French mailbox service
 Leaseweb,suffix,leaseweb.com,10,Leaseweb hosting
 Legacy Microsoft Hosted,regex,^.*\.pamx1\.hotmail\.com$,60,Legacy Microsoft hosted email infrastructure
 LocalNet,suffix,localnet.com,60,LocalNet ISP / hosted email
@@ -154,6 +191,7 @@ Locaweb,suffix,locaweb.com.br,60,Locaweb hosted email (Brazil)
 Lolipop,suffix,lolipop.jp,60,Lolipop Japanese hosting email
 Mail Anyone,suffix,mailanyone.net,60,MailAnyone inbound MX
 Mail Spam Protection,suffix,mailspamprotection.com,20,MailSpamProtection inbound MX
+Mail.bg,suffix,mail.bg,10,Bulgarian mailbox service
 mail.de,suffix,mail.de,10,United Internet mail.de
 Mail.ru,suffix,mail.ru,60,Mail.ru MX
 Mailbox Park,suffix,mb5p.com,10,"Unusual as MX, review if found"
@@ -162,12 +200,14 @@ MailControl,suffix,mailcontrol.com,20,MailControl email security platform
 MailGate SC,regex,^mx\d+\.secure-mailgate\.com$,20,Secure-Mailgate email security gateway
 MailGuard,suffix,mailguard.com.au,20,MailGuard email security platform
 Mailgun,suffix,mailgun.org,20,"Mailgun inbound MX (mxa/mxb.mailgun.org) - Unusual as MX, review if found"
-MailHop,suffix,mailhop.org,60,MailHop hosted email routing service
-Mailhop,suffix,mx.mailhop.org,10,email hosting service
+MailHop,suffix,mailhop.org,10,MailHop hosted email routing service
 MailHostBox,suffix,mailhostbox.com,60,MailHostBox hosted email (reseller platform)
 Mailinblack,suffix,mailinblack.com,20,Mailinblack email security and filtering platform
 Mailkit,suffix,mailkit.net,10,Mailkit platform
 MailMarshal,suffix,mailmarshal.cloud,20,MailMarshal hosted email security platform
+Mailo,suffix,hellomailo.net,10,Mailo email infrastructure
+Mailo,suffix,mailo.com,10,Mailo mailbox service
+Mailo,suffix,netcourrier.com,10,Mailo legacy mailbox service
 Mailprotector,suffix,cloudfilter.net,20,CloudFilter email security platform
 Mailprotector,suffix,emailservice.io,10,Mailprotector
 Mailprotector,suffix,mailsecurity.io,20,MailSecurity.io inbound email protection
@@ -176,16 +216,17 @@ MailWall,suffix,mymailwall.com,20,MailWall email security platform
 Managed Security Service Provider,suffix,virtuworks.net,20,VirtuWorks email security platform
 Manitu,suffix,manitu.net,60,German hosting provider
 Mesh,suffix,emailsecurity.app,20,EmailSecurity.app inbound mail security
-Microsoft 365,suffix,eo.outlook.com,0,Office 365 and Exchange Online Protection
-Microsoft 365,suffix,mail.outlook.com,0,Office 365 and Exchange Online Protection
-Microsoft 365,suffix,mail.protection.outlook.com,10,Office 365 and Exchange Online Protection
-Microsoft 365,suffix,mx.microsoft,0,Office 365 and Exchange Online Protection
-Microsoft 365,suffix,office365.us,20,"Seen 982 domains, ex: hermeticsolutionsgroup.mail.protection.office365.us"
+Microsoft (Unclassified),suffix,mx.microsoft,90,Microsoft MX infrastructure with unidentified service
+Microsoft 365,suffix,eo.outlook.com,0,Existing Microsoft 365 rule pending verification
+Microsoft 365,suffix,mail.outlook.com,0,Existing Microsoft 365 rule pending verification
+Microsoft 365,suffix,mail.protection.outlook.com,10,Exchange Online Protection
+Microsoft 365,suffix,office365.us,20,Microsoft 365 US Government infrastructure
 Mimecast,suffix,mimecast.co.za,10,Inbound security gateway
 Mimecast,suffix,mimecast.com,10,Inbound security gateway
 Mimecast,suffix,mimecast-offshore.com,10,Inbound security gateway
 Mirus,suffix,mirus.io,20,Mirus email security platform
 mittwald,suffix,agenturserver.de,10,German hosting provider mittwald
+MTS,suffix,mymts.net,10,MTS ISP email
 MX-Hub,regex,^mailin\.mx-hub\.(cz|eu|net|sk)$,20,Shared MX-Hub mail gateway (mailin.mx-hub.<tld>)
 MXroute,suffix,mxrouting.net,60,MXroute hosted email infrastructure
 My Cloud Mailbox,suffix,mycloudmailbox.com,60,MyCloudMailbox hosted email
@@ -206,30 +247,38 @@ OCN,suffix,ocn.ad.jp,60,OCN / NTT Japan mailbox provider
 Omnis Network,suffix,omnis.com,60,Omnis Network hosted email
 one.com,suffix,one.com,60,one.com hosted email infrastructure
 OneNet Global,suffix,oneb.net,60,OneB hosted email
+Onet Poczta,suffix,poczta.onet.pl,10,Polish mailbox service
+Online.net,suffix,mx.online.net,10,Online.net email infrastructure
 OpenText,suffix,spamh.com,10,OpenText formerly Zix
 Openwave,suffix,cloud.openwave.ai,60,Openwave hosted email infrastructure
 Open-Xchange,suffix,oxcs.net,20,"Seen 1358 domains, ex: mx001.netsol.xion.oxcs.net"
 Orange,suffix,orange.fr,60,Orange hosted email infrastructure
-Outlook,suffix,olc.protection.outlook.com,10,"Handles outlook.com, hotmail.com, msn.com, etc..."
+Outlook,regex,^(hotmail|outlook|msn)-[a-z0-9-]+\.[a-z0-9-]+\.mx\.microsoft$,0,Microsoft consumer email infrastructure
+Outlook,suffix,olc.protection.outlook.com,10,Microsoft consumer email infrastructure
 OVH,suffix,mail.ovh.net,1,OVH Hosting
 OVH,suffix,mx1.ovh.net,1,OVH Hosting
 Pair Networks,suffix,pair.com,60,Pair Networks hosted email infrastructure
 Parked Domain,suffix,park-mx.above.com,10,Above.net parked/expired domain
 Plala,suffix,plala.or.jp,60,Plala Japanese ISP mail
+Private Email,suffix,privateemail.com,10,Private Email Business hosting
 Proofpoint,regex,^mx\d+\.ppsmtp\.com$,20,Proofpoint PPSMTP email security gateway
 Proofpoint,suffix,ppe-hosted.com,20,"Seen 8089 domains, ex: mx1-us1.ppe-hosted.com"
 Proofpoint,suffix,pphosted.com,10,Proofpoint Enterprise
 Proton Mail,suffix,protonmail.ch,10,Proton Mail inbound MX
-Proton Mail,suffix,simplelogin.co,60,SimpleLogin email alias and forwarding service
+Proton Mail,suffix,simplelogin.co,60,SimpleLogin email alias and forwarding service owned by Proton
 Proximus,suffix,proximus.be,60,Proximus hosted email infrastructure
 purelymail,suffix,purelymail.com,50,purelymail MX
 QQ Mail,suffix,qq.com,60,Tencent QQ Mail MX (mxbiz*.qq.com)
 Rackspace,suffix,emailsrvr.com,20,"Seen 1040 domains, ex: mx1.emailsrvr.com"
 Raptor Email Security,suffix,raptoremailsecurity.com,20,Inbound security gateway
+REG.RU,suffix,hosting.reg.ru,10,REG.RU email hosting
+Regery,suffix,fwd.regery.net,10,Regery email forwarding
+RENATER,suffix,relay.renater.fr,10,RENATER email relay infrastructure
 Reply.zone,suffix,reply.zone,30,Reply routing / inbound processing infrastructure
 Salesforce Marketing Cloud,regex,^inbound-reply\.s\d+\.exacttarget\.com$,30,"Salesforce Marketing Cloud inbound reply handling MX - Unusual as MX, review if found"
 Securence,suffix,securence.com,20,"Seen 499 domains, ex: smtp1-msp.securence.com"
 SendGrid,suffix,sendgrid.net,30,"SendGrid inbound email processing MX - Unusual as MX, review if found"
+SFR,suffix,smtp-in.sfr.fr,10,SFR inbound email infrastructure
 Sherweb Inc.,suffix,sherwebcloud.com,60,Sherweb Cloud hosted email / M365 reseller
 SilverSky,suffix,usa.net,60,USA.NET enterprise hosted email
 Simply.com,suffix,simply.com,60,Simply.com hosted email platform
@@ -238,12 +287,13 @@ SkyMail,suffix,skymail.net.br,60,SkyMail hosted email (Brazil)
 SoftHome,suffix,softhome.net,60,SoftHome hosted email infrastructure
 Sonic,suffix,mx.sonic.net,60,Sonic.net ISP inbound mail
 Sophos,suffix,sophos.com,20,"Seen 291 domains, ex: mx-01-us-west-2.prod.hydra.sophos.com"
+Spaceship,suffix,efwd.spaceship.net,10,Spaceship email forwarding
 SpamExperts,suffix,spamexperts.com,20,SpamExperts inbound email security platform
 Spamhaus,suffix,spamhaus.org,50,"Unusual as MX, review if found"
 Spamhaus,suffix,spamteq.com,10,Spam filtering gateway
 SpamHero,suffix,mxthunder.com,20,"Seen 320 domains, ex: besenpartners-com.p10.mxthunder.com"
 SpamHero,suffix,spamhero.com,10,email security services
-SpamTitan,contains,spamtitan,20,SpamTitan email security platform
+Sparkpost,suffix,sparkpostmail.com,10," Sparkpost mail systems- Unusual as MX, review if found"
 Spectrum,suffix,charter.net,60,Charter / Spectrum business mail MX
 StackMail,suffix,stackmail.com,10,20i and StackCP hosting platforms
 StartMail,suffix,startmail.com,60,StartMail hosted email provider
@@ -256,26 +306,30 @@ Suspicious Domain,suffix,hotmsil.com,0,"Unusual as MX, review if found"
 Suspicious Domain,suffix,recoverhost.com,300,"Unusual as MX, review if found"
 Suspicious Domain,suffix,yshoo.com,0,"Unusual as MX, review if found"
 Swisscom Mail,suffix,swisscom.com,60,Swisscom hosted enterprise and ISP email
+Swisscows,suffix,swisscows.email,10,Swisscows email service
 Synacor,suffix,synacor.com,60,Synacor hosted email infrastructure
 TDS Telecom,suffix,tds.net,60,TDS Telecom ISP email
 Team Blue,suffix,mailcluster.loopia.se,10,"Loopa mail service, Nordic region"
 Team Blue,suffix,register.it,60,Register.it hosted email platform
+Telefonica,suffix,telefonica.net,10,Telefonica ISP email
 Tiger Technologies,suffix,tigertech.net,60,Tiger Technologies hosted email
 Tiscali,suffix,tiscali.it,60,Italian ISP mail provider
+Titan Email,suffix,titan.email,60,Titan Email inbound MX
 TitanHQ,suffix,antispamengine.com,20,AntiSpamEngine email security gateway
-TitanHQ,suffix,spamtitan.com,20,SpamTitan email security (TitanHQ)
-TitanHQ,suffix,titan.email,60,Titan Email inbound MX
+TitanHQ,suffix,spamtitan.com,20,SpamTitan email security service operated by TitanHQ
 TitanHQ,suffix,titanhq.com,20,"Seen 359 domains, ex: us1-smtp-mx1.titanhq.com"
 TransIP Mail,suffix,transip.email,60,TransIP hosted email infrastructure
 Trend Micro,suffix,trendmicro.com,20,"Seen 608 domains, ex: lne.in.tmes.trendmicro.com"
 Trend Micro,suffix,trendmicro.eu,20,"Seen 608 domains, ex: lne.in.tmes.trendmicro.com"
+Tuta,suffix,tutanota.de,10,Encrypted email service
 United Domains Mail,suffix,udag.de,60,United Domains hosted email infrastructure
 United Online,suffix,untd.com,10,United Online
 University Hospitals,suffix,uhserver.com,60,UHServer hosted email
 Upstream Security,suffix,upstreamsecurity.net,20,Upstream Security email security platform
 Utande,suffix,utande.co.zw,60,Regional ISP mail provider
 VadeSecure,suffix,cloud.vadesecure.com,10,mx01.cloud.vadesecure.com;mx02.cloud.vadesecure.com;mx03.cloud.vadesecure.com;mx04.cloud.vadesecure.com
-Validity Everest,suffix,everest.validity.com,20,Validity Everest hosted email security platform
+Validity Everest,suffix,everest.validity.com,20,Validity Everest seed testing infrastructure
+Validity Mailbox Park,regex,^mx[0-9]+\.(?:m2bp|mb1p)\.com$,10,Validity Mailbox Park infrastructure - Signal/trap network
 Whidbey Telecom,suffix,whidbey.net,60,Whidbey Telecom ISP email
 Word to the Wise,suffix,wordtothewise.com,50,Private domain
 Xcitium,suffix,xcitium.com,20,Xcitium hosted email security platform
